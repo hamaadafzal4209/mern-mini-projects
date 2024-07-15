@@ -2,8 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import userRouter from './Routes/userRoute.js'
 
 const app = express();
 
@@ -20,11 +19,8 @@ app.get('/', (req, res) => {
     res.send("Working")
 })
 
-
-
-app.post("/register", (req,res) => {
-    
-})
+// import routes
+app.use('/api/user', userRouter)
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
