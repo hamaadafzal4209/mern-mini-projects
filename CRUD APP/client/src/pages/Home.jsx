@@ -23,7 +23,7 @@ useEffect(() => {
   
   return (
     <div>
-      Home page
+      Dashboard
     </div>
   )
 }
