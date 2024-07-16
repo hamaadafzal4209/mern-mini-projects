@@ -42,16 +42,9 @@ function ResetPassword() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Reset Password
               </h1>
-              <form
-                onSubmit={handleSubmit}
-                className="space-y-4 md:space-y-6"
-                action="#"
-              >
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
+                  <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     New Password
                   </label>
                   <input
@@ -66,10 +59,7 @@ function ResetPassword() {
                   />
                 </div>
                 <div>
-                  <label
-                    htmlFor="confirm-password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
+                  <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Confirm New Password
                   </label>
                   <input
@@ -83,18 +73,12 @@ function ResetPassword() {
                     required
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
+                <button type="submit" className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   Reset Password
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Remember your password?{" "}
-                  <Link
-                    to="/login"
-                    className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-                  >
+                  <Link to="/login" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
                     Sign in
                   </Link>
                 </p>
