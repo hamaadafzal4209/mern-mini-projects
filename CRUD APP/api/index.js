@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./Routes/userRoute.js";
+import dotenv from 'dotenv';
 
 const app = express();
+dotenv.config();
 
 mongoose
   .connect("mongodb://localhost:27017/crudApp")

@@ -1,6 +1,7 @@
 import userModel from "../model/userModel.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
+import nodemailer from 'nodemailer';
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -52,7 +53,7 @@ export const login = async (req, res) => {
         .json({ success: false, message: "Wrong credentials" });
     }
 
-    const token = jwt.sign({ id: user.id }, "jkdjdiejnnjdn");
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
     res.cookie("token", token);
     res.status(200).json({ success: true, message: "Login successful", token });
   } catch (error) {
@@ -71,8 +72,55 @@ export const forgotPassword = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found!" });
     }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "5m",
+    });
+
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "hamaadafzal516@gmail.com",
+        pass: "qstp ibed fizj ttaa",
+      },
+    });
+
+    var mailOptions = {
+      from: "hamaadafzal516@gmail.com",
+      to: email,
+      subject: "Reset Password",
+      text: `http://localhost:5713/resetpassword/${token}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        return res.json({ success: false, message: "Error Sending Email" });
+      } else {
+        return res.json({ success: true, message: "Email Sent" });
+      }
+    });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, message: error.message });
-  }
+      console.log(error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
 };
+
+export const resetPassword = async (req,res) => {
+    const {token} = req.params;
+    const {password} = req.body;
+
+    try {
+        const decoded = jwt.verify(token,process.env.JWT_SECRET);
+        const id = decoded.id;
+
+        const hashedPassword = await bcrypt.hash(password,10);
+        await userModel.findByIdAndUpdate({_id:id}, {password:hashedPassword}); 
+        
+        return res.status(200).json({ success: true, message: "Password Updated Succesfully!" });
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+    
+}
