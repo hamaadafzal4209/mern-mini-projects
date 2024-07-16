@@ -9,7 +9,9 @@ export const register = async (req, res) => {
     const existsUser = await userModel.findOne({ email });
 
     if (existsUser) {
-      return res.status(400).json({ success: false, message: "User already exists" });
+      return res
+        .status(400)
+        .json({ success: false, message: "User already exists" });
     }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -21,7 +23,9 @@ export const register = async (req, res) => {
     });
 
     const user = await newUser.save();
-    res.status(201).json({ success: true, message: "User created successfully", user });
+    res
+      .status(201)
+      .json({ success: true, message: "User created successfully", user });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error.message });
@@ -35,17 +39,38 @@ export const login = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ success: false, message: "Wrong credentials" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Wrong credentials" });
     }
 
-    const token = jwt.sign({ id: user.id }, "jkdjdiejnnjdn", { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, "jkdjdiejnnjdn");
+    res.cookie("token", token);
     res.status(200).json({ success: true, message: "Login successful", token });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found!" });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error.message });
